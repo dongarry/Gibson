@@ -1,0 +1,109 @@
+# Lets start off with opening a basic .txt file..
+
+require 'rubygems'
+require 'ferret'
+require 'find'
+
+include Ferret
+
+
+
+#puts "Give me a file to parse.."
+#mfile = gets
+
+#puts mfile
+#File.open(mfile).each_line{ |s| puts s}
+
+#if File.file?(mfile) then
+#   File.open("1.txt").each_line{ |s| puts s}
+#else
+#  puts "Invalid file"
+#end
+
+=begin
+counter=1
+begin
+  file = File.new("1.txt", "r")
+  while (line = file.gets)
+        puts "#{counter}: #{line}"
+        counter = counter + 1
+  end
+  file.close
+rescue => err
+  puts "Exception: #{err}"
+  err
+end
+
+
+
+
+s = Lingua::Stemmer.new(:language =>"en")
+
+File.open("4.txt").each do |line|
+  line.split(" ").each do |num|
+    puts num + ":" + Lingua.stemmer("#{num}")
+  end
+end
+
+
+
+text = %q{this is a test of all tests.}
+stop_words = %w{is a of}
+
+words = text.scan(/\w+/)
+key_words = words.select { |word| !stop_words.include?(word) }
+
+puts key_words.join(' ')
+
+=end
+
+# Detect stop words QUICKLY
+# Uses a bloom filter instead of searching literally through a list of stopwords
+# for > 3x speed increase
+#
+#    using bloom filter: 2.580000   0.030000   2.610000 (  2.698829)
+#  using literal search: 7.850000   0.120000   7.970000 (  8.181684)
+
+
+require 'bloominsimple'
+require 'digest/sha1'
+require 'pp'
+
+# Create a simple bloom filter that uses a SHA1 hash (more effective than BloominSimple's default hashing)
+b = BloominSimple.new(50000) do |word|
+  Digest::SHA1.digest(word.downcase.strip).unpack("VVV")
+end
+
+# Add stopwords to the bloom filter!
+stopwords = []
+File.open('stopwords_en.txt').each { |a| b.add(a); stopwords << a.downcase.strip }
+
+# Read in a whole dictionary of regular words
+#words = File.open('/usr/share/dict/words').read.split.collect{|a| a.downcase.strip }
+words = File.open('1.txt').read.split.collect{|a| a.downcase.strip }
+
+# Define two ways to detect stopwords for comparison..
+using_filter = lambda { |word| b.includes?(word) }
+using_array = lambda { |word| stopwords.include?(word.downcase.strip) }
+techniques = [using_filter, using_array]
+#techniques = [using_filter]
+
+# Run stopword comparisons with both techniques
+t = techniques.collect { |l| words.collect { |a| l[a] } }
+
+# See how effective the bloom filter has been compared to the literal search
+if t[0] == t[1]
+  puts "GOOD"
+else
+  words.zip(t[0],t[1]).each do |x|
+    puts x.first if x[1] != x[2]
+  end
+end
+
+ words.zip(t[0]).each do |x|
+    puts x
+ end
+
+# Now do speed benchmarks..
+techniques.each { |l| puts Benchmark.measure { words.each { |a| l[a] } } }
+
