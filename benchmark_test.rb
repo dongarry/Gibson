@@ -6,7 +6,7 @@
 #  using literal search: 7.850000   0.120000   7.970000 (  8.181684)
 
 
-require 'bloominsimple'
+require 'hashfield'
 require 'digest/sha1'
 require 'pp'
 

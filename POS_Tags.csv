@@ -1,0 +1,36 @@
+CC,Coordinating conjunction
+CD,Cardinal number
+DT,Determiner/demonstrative pronoun 
+EX,Existenial there
+FW,Foreign word
+IN,subordinating conjunction (FUNC_WORD) or preposition (PREP) 
+JJ,adjective 
+JJR,adjective comparative 
+JJS,adjective superlative 
+LS,List item marker
+MD,Modal
+NN,Common noun
+NNS,Common Noun Plural or dual
+NNP,Proper Noun Singular
+NNPS,Proper Noun Plural
+PDT,Predeterminer 
+POS,Possessive ending
+PRP,Possessive Pronoun
+PRP$,Possessive Pronoun
+RB,adverb 
+RBR,Adverb comparative 
+RBS,Adverb superlative
+RP,Particle 
+SYM,Symbol
+TO,to 
+UH,Interjection 
+VB,Verb
+VBD,perfect Verb 
+VBG,Verb gerund or present participle 
+VBN,Verb past participle 
+VBP,Verb non 3rd person singular present 
+VBZ,Verb 3rd person singular present 
+WDT,Wh-determiner 
+WP,Wh-pronoun 
+WP$,Possessive wh-pronoun 
+WRB,Wh-adverb 
